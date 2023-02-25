@@ -7,14 +7,14 @@ from .models import Shop, Product, Category, Parameter, ProductParameter
 from celery import shared_task
 
 @shared_task()
-def partner_update_task(request, *args, **kwargs):
-    if not request.user.is_authenticated:
+def partner_update_task(request, user, *args, **kwargs):
+    if not user.is_authenticated:
         return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
 
-    if request.user.type != 'shop':
+    if user.type != 'shop':
         return JsonResponse({'Status': False, 'Error': 'Только для магазинов'}, status=403)
 
-    url = request.data.get('url')
+    url = request.get('url')
     if url:
         validate_url = URLValidator()
         try:
@@ -26,7 +26,7 @@ def partner_update_task(request, *args, **kwargs):
 
             data = load_yaml(stream, Loader=Loader)
 
-            shop, _ = Shop.objects.get_or_create(name=data['shop'], user=request.user, url=url)
+            shop, _ = Shop.objects.get_or_create(name=data['shop'], user=user, url=url)
 
             for category in data['categories']:
                 category_object, _ = Category.objects.get_or_create(id=category['id'], name=category['name'])
