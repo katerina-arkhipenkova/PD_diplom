@@ -218,7 +218,9 @@ class PartnerUpdateAPIView(APIView):
         """
         Вызываем функцию из celery
         """
-        partner_update_task.delay(request.data, request.user, *args, **kwargs)
+        user_serializer = UserSerializer(request.user)
+        partner_update_task.delay(request.data, user_serializer.data, *args, **kwargs)
+        return JsonResponse({'status': True})
         # # Старый вариант без Celery
         # if not request.user.is_authenticated:
         #     return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)

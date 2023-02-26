@@ -1,13 +1,18 @@
 from django.core.validators import URLValidator
 from django.http import JsonResponse
 from django.core.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated
 from yaml import load as load_yaml, Loader
 from requests import get
 from .models import Shop, Product, Category, Parameter, ProductParameter
+from .serializers import ShopSerializer, UserSerializer, ContactSerializer, CategorySerializer, ProductSerializer, \
+    OrderItemSerializer, OrderSerializer
 from celery import shared_task
 
 @shared_task()
 def partner_update_task(request, user, *args, **kwargs):
+    permission_classes = [IsAuthenticated]
+
     if not user.is_authenticated:
         return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
 
