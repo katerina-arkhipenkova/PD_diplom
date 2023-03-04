@@ -22,4 +22,5 @@ app_name = 'pd_diplom'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('main.urls', namespace='main')),
+    path('accounts/', include('allauth.urls')),
 ]

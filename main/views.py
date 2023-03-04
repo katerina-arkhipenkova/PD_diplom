@@ -15,6 +15,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import viewsets
 from .serializers import ShopSerializer, UserSerializer, ContactSerializer, CategorySerializer, ProductSerializer, \
     OrderItemSerializer, OrderSerializer
 from .models import Shop, Product, Category, Parameter, ProductParameter, User, ConfirmEmailToken, Contact, Order, \
@@ -193,18 +194,31 @@ class ContactAPIView(APIView):
                             status=status.HTTP_403_FORBIDDEN)
 
 
-class ShopAPIView(APIView):
-    def get(self, request, *args, **kwargs):
-        shops = Shop.objects.filter(state=True)
-        serializer = ShopSerializer(shops, many=True)
-        return Response(serializer.data)
+# class ShopAPIView(APIView):
+#     def get(self, request, *args, **kwargs):
+#         shops = Shop.objects.filter(state=True)
+#         serializer = ShopSerializer(shops, many=True)
+#         return Response(serializer.data)
+#
+#
+# class CategoryAPIView(APIView):
+#     def get(self, request, *args, **kwargs):
+#         categories = Category.objects.all()
+#         serializer = CategorySerializer(categories, many=True)
+#         return Response(serializer.data)
+
+class ShopViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (AllowAny,)
+    queryset = Shop.objects.all()
+    serializer_class = ShopSerializer
+    ordering = ['-name']
 
 
-class CategoryAPIView(APIView):
-    def get(self, request, *args, **kwargs):
-        categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=True)
-        return Response(serializer.data)
+class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (AllowAny,)
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    ordering = ['-name']
 
 
 class PartnerUpdateAPIView(APIView):
