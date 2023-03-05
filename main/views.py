@@ -91,6 +91,7 @@ class PasswordResetAPIView(APIView):
     Запрос на изменение пароля
     '''
 
+    throttle_scope = 'password_reset'
     def post(self, request, *args, **kwargs):
         if {'email'}.issubset(request.data):
             user = User.objects.get(email=request.data['email'])
@@ -105,7 +106,7 @@ class PasswordResetConfirmAPIView(APIView):
     '''
     Подтверждение смены пароля
     '''
-
+    throttle_scope = 'password_reset'
     def post(self, request, *args, **kwargs):
         if {'email', 'token', 'password'}.issubset(request.data):
 
@@ -226,7 +227,7 @@ class PartnerUpdateAPIView(APIView):
     Класс для обновления прайса от поставщика
     """
     permission_classes = [IsAuthenticated]
-    throttle_scope = 'change_price'
+    throttle_scope = 'update_price'
 
     def post(self, request, *args, **kwargs):
         """
