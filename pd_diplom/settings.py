@@ -154,7 +154,8 @@ REST_FRAMEWORK = {
         'user': '120/minute',
         'password_reset': '1/day',
         'update_price': '1/day'
-    }
+    },
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
 CELERY_BROKER_URL = "redis://localhost:6379"
