@@ -1,10 +1,7 @@
-import jwt
 import pytest
-from datetime import datetime
 from rest_framework.test import APIClient
 from model_bakery import baker
 from main.models import Product, Category, User
-from rest_framework.authtoken.models import Token
 
 
 @pytest.fixture
